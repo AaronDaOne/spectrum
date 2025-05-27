@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<style>
+			html,
+			body {
+				margin: 0;
+				height: 100%;
+			}
+			/* #mainCanvas {
+				width: 100%;
+				height: 100%;
+			} */
+			body::-webkit-scrollbar {
+				display: none; /* Chrome, Safari, Opera */
+			}
+			#audioFile {
+				width: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="mainCanvas" width="1000px" height="500px"></canvas>
+		<audio controls id="audioFile"></audio>
+		<input
+			type="file"
+			name="Song Picker"
+			id="songPicker"
+			accept="audio/*"
+		/>
+		<button class="changeVisualizerButton" id="0">
+			Trap nation visualizer
+		</button>
+		<button class="changeVisualizerButton" id="1">
+			Color bars visualizer
+		</button>
+		<button class="changeVisualizerButton" id="2">
+			Tilted white bars visualizer
+		</button>
+	</body>
+	<script src="index.js"></script>
+</html>
