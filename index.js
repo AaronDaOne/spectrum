@@ -28,63 +28,63 @@ const vis = {
 
 var currenVisualizer = vis.TRAP_NATION;
 
-// document.addEventListener("click", () => {
-// 	if (audioContextInit) return;
-// 	// return;
-// 	audioContextInit = true;
-// 	if (audioPlayer.src) {
-// 		audioPlayer.play();
-// 	}
-// 	const audioSource = audioCtx.createMediaElementSource(audioPlayer);
-// 	analyser.minDecibels = -45;
-// 	analyser.maxDecibels = 0;
-// 	// analyser.smoothingTimeConstant = 0.1
-// 	audioSource.connect(analyser);
-// 	analyser.connect(audioCtx.destination);
+document.addEventListener("click", () => {
+	if (audioContextInit) return;
+	// return;
+	audioContextInit = true;
+	if (audioPlayer.src) {
+		audioPlayer.play();
+	}
+	const audioSource = audioCtx.createMediaElementSource(audioPlayer);
+	analyser.minDecibels = -45;
+	analyser.maxDecibels = 0;
+	// analyser.smoothingTimeConstant = 0.1
+	audioSource.connect(analyser);
+	analyser.connect(audioCtx.destination);
 
-// 	analyser.fftSize = BUFFER_LENGTH * 2;
-// 	const bufferLength = analyser.frequencyBinCount;
-// 	console.log(bufferLength);
-// 	const dataArray = new Uint8Array(bufferLength);
+	analyser.fftSize = BUFFER_LENGTH * 2;
+	const bufferLength = analyser.frequencyBinCount;
+	console.log(bufferLength);
+	const dataArray = new Uint8Array(bufferLength);
 
-// 	// let lastTime = performance.now();
+	// let lastTime = performance.now();
 
-// 	function draw() {
-// 		requestAnimationFrame(draw);
+	function draw() {
+		requestAnimationFrame(draw);
 
-// 		// fps counter
-// 		// console.log(1000 / (performance.now() - lastTime));
-// 		// lastTime = performance.now();
+		// fps counter
+		// console.log(1000 / (performance.now() - lastTime));
+		// lastTime = performance.now();
 
-// 		canvas.width = window.innerWidth;
-// 		canvas.height = window.innerHeight;
-// 		width = window.innerWidth;
-// 		height = window.innerHeight;
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+		width = window.innerWidth;
+		height = window.innerHeight;
 
-// 		analyser.getByteFrequencyData(dataArray);
+		analyser.getByteFrequencyData(dataArray);
 
-// 		// const barWidth = (width / dataArray.length) * 2.5;
+		// const barWidth = (width / dataArray.length) * 2.5;
 
-// 		// canvasCtx.closePath();
-// 		// canvasCtx.fill();
-// 		switch (currenVisualizer) {
-// 			case vis.WHITE_BARS:
-// 				barsVisualizer(dataArray);
-// 				break;
+		// canvasCtx.closePath();
+		// canvasCtx.fill();
+		switch (currenVisualizer) {
+			case vis.WHITE_BARS:
+				barsVisualizer(dataArray);
+				break;
 
-// 			case vis.COLORED_BARS:
-// 				coloredBarsVizualizer(dataArray);
-// 				break;
+			case vis.COLORED_BARS:
+				coloredBarsVizualizer(dataArray);
+				break;
 
-// 			case vis.TRAP_NATION:
-// 				trapNationVisualizer(dataArray);
-// 			default:
-// 				break;
-// 		}
-// 	}
+			case vis.TRAP_NATION:
+				trapNationVisualizer(dataArray);
+			default:
+				break;
+		}
+	}
 
-// 	draw();
-// });
+	draw();
+});
 
 function barsVisualizer(dataArray) {
 	canvasCtx.fillStyle = "rgb(0 0 0)";
@@ -408,6 +408,7 @@ document.querySelector("#songPicker").addEventListener("change", (e) => {
 	const file = e.target.files[0];
 	if (file) {
 		audioPlayer.src = URL.createObjectURL(file);
+		audioCtx.resume();
 		audioPlayer.play();
 	}
 });
