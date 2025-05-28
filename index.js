@@ -2,8 +2,8 @@ const audioPlayer = document.getElementById("audioFile");
 const canvas = document.getElementById("mainCanvas");
 const canvasCtx = canvas.getContext("2d");
 
-let width = 1000;
-let height = 500;
+let width = window.innerWidth;
+let height = window.innerHeight;
 
 let circle_center = [width / 2, height / 2];
 const CIRCLE_RADIUS = 150;
