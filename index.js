@@ -26,15 +26,16 @@ const vis = {
 	WHITE_BARS: 2,
 };
 
-var currenVisualizer = vis.TRAP_NATION;
+let currenVisualizer = vis.WHITE_BARS;
+
+let barsParticles = Array();
 
 document.addEventListener("click", () => {
 	if (audioContextInit) return;
-	// return;
 	audioContextInit = true;
-	if (audioPlayer.src) {
-		audioPlayer.play();
-	}
+	// if (audioPlayer.src) {
+	// 	audioPlayer.play();
+	// }
 	const audioSource = audioCtx.createMediaElementSource(audioPlayer);
 	analyser.minDecibels = -45;
 	analyser.maxDecibels = 0;
@@ -67,6 +68,9 @@ document.addEventListener("click", () => {
 
 		// canvasCtx.closePath();
 		// canvasCtx.fill();
+
+		if (audioCtx.state == "suspended") audioCtx.resume();
+
 		switch (currenVisualizer) {
 			case vis.WHITE_BARS:
 				barsVisualizer(dataArray);
@@ -89,7 +93,6 @@ document.addEventListener("click", () => {
 function barsVisualizer(dataArray) {
 	canvasCtx.fillStyle = "rgb(0 0 0)";
 	canvasCtx.fillRect(0, 0, width, height);
-	canvasCtx.fillStyle = "#fff";
 
 	const bass =
 		dataArray
@@ -111,9 +114,40 @@ function barsVisualizer(dataArray) {
 
 	const screenCenter = [width / 2, height / 2];
 
-	canvasCtx.translate(screenCenter[0], screenCenter[1]);
+	canvasCtx.translate(
+		screenCenter[0] + Math.random() * 20 * bass,
+		screenCenter[1] + Math.random() * 20 * bass
+	);
 	canvasCtx.rotate((-30 * Math.PI) / 180);
+
+	// particles
+	while (barsParticles.length < 300) {
+		let y = (Math.random() - 0.5) * 0.01 * height;
+		barsParticles.push({
+			x: -width * (Math.random() + 1),
+			y: y,
+			r: 10 + Math.random() * 10,
+			xSpeed: Math.random() * 5 + 1,
+			ySpeed: (y / Math.abs(y)) * Math.random() * 10,
+		});
+	}
+	canvasCtx.fillStyle = `hsl(0, 0%, ${50 + bass * 100}%)`;
+
+	for (let i = 0; i < barsParticles.length; i++) {
+		const particle = barsParticles[i];
+		canvasCtx.beginPath();
+		canvasCtx.arc(particle.x, particle.y, particle.r, 0, 2 * Math.PI);
+		canvasCtx.fill();
+		particle.x += particle.xSpeed + bass * 50;
+		particle.y += particle.ySpeed + bass;
+		if (particle.x > width) {
+			barsParticles.splice(i, 1);
+		}
+	}
+
+	// bars
 	canvasCtx.scale(1 + bass, 1 + bass);
+	canvasCtx.fillStyle = "#fff";
 
 	for (let i = 0; i < newDataArray.length; i++) {
 		canvasCtx.beginPath();
@@ -405,10 +439,9 @@ for (const element of document.querySelectorAll(".changeVisualizerButton")) {
 }
 
 document.querySelector("#songPicker").addEventListener("change", (e) => {
-	const file = e.target.files[0];
+	const file = e.target.files?.[0];
 	if (file) {
 		audioPlayer.src = URL.createObjectURL(file);
-		audioCtx.resume();
 		audioPlayer.play();
 	}
 });
